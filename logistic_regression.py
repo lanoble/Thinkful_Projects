@@ -6,7 +6,7 @@ import statsmodels.api as sm
 loansData = pd.read_csv('loansData_clean.csv')
 
 #creation of under 12 true/false
-loansData['IR.under12'] = map((lambda x: x < 12.0), loansData['Interest.Rate'])
+loansData['IR.under12'] = map((lambda x: x <= 12.0), loansData['Interest.Rate'])
 
 #creation of Intercept Constant
 loansData['Intercept.Constant'] = 1.0
@@ -24,7 +24,8 @@ result = logit.fit()
 coeff = result.params
 
 def logistic_function(FicoScore, LoanAmount):
-	p = 1 / (1 + math.e**(coeff['Intercept.Constant'] + coeff['FICO.Score']*(FicoScore) - coeff['Amount.Requested']*(LoanAmount))
+	p = 1 / (1 + math.e**(coeff['Intercept.Constant'] + coeff['FICO.Score']*(FicoScore) + coeff['Amount.Requested']*(LoanAmount)))
 	return p
 
+print logistic_function(720,10000)
 
